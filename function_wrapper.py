@@ -1,6 +1,4 @@
-import numpy as np
 import sympy as sp
-from sympy.core.numbers import Rational
 
 
 class Function(dict):

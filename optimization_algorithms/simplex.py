@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def simplex(fw, x0, r, alpha, tol=1e-6):
     iter_count = 0
 
@@ -37,32 +38,27 @@ def simplex(fw, x0, r, alpha, tol=1e-6):
         xc /= n
 
         # reflect worst point
-        xr = -simplex[worst] + 2 * xc
+        xr = 2 * xc - simplex[worst]
 
-        # check if reflected point is better than worst point
+        # check if reflected point is better than the WORST point
         if fw.at(xr, r) < fw.at(simplex[worst], r):
             simplex[worst] = xr
         else:
-            # contract simplex
-            xc = (simplex[worst] + xc) / 2
-            for i in range(n+1):
-                if i != worst:
-                    simplex[i] = (simplex[i] + simplex[worst]) / 2
-                if fw.at(simplex[i], r) < fw.at(simplex[best], r):
-                    best = i
-            if fw.at(xr, r) < fw.at(simplex[best], r):
+            # check if reflected point is better than the second-worst point
+            if fw.at(xr, r) < fw.at(simplex[worst], r):
                 simplex[worst] = xr
+            # contract the simplex
+            xk = (simplex[worst] + xc) / 2
+            if fw.at(xk, r) < fw.at(simplex[worst], r):
+                simplex[worst] = xk
             else:
-                # shrink simplex towards best point
-                for i in range(n+1):
-                    if i != best:
-                        simplex[i] = (simplex[i] + simplex[best]) / 2
-                    if fw.at(simplex[i], r) < fw.at(simplex[best], r):
-                        best = i
+                # shrink the simplex towards the best point
+                for i in range(1, n+1):
+                    simplex[i] = (simplex[i] + simplex[best]) / 2
 
         # check if simplex is small enough
-        if np.linalg.norm(simplex[worst] - simplex[best]) < tol:
+        if np.max(np.abs(simplex - simplex[best])) < tol:
             break
 
-    # return best point
+    # return the best point
     return simplex[best], iter_count

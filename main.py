@@ -20,7 +20,7 @@ if __name__ == '__main__':
 	# print(penaltyFunction.at([1]*3, 0.2)) # sqrt(6)/6
 	# print(penaltyFunction.at([6**0.5/6]*3 + [0.2])) # sqrt(6)/6
 
-	x_val = np.array([1]*3)
-	r_val = 10
-	result, iter_count = simplex(penaltyFunction, x_val, r_val, alpha=.3, tol=1e-6)
+	x_val = np.array([1, 1, 1])
+	r_val = 0.1
+	result, iter_count = simplex(penaltyFunction, x_val, r_val, alpha=.3, tol=1e-4)
 	print(result, iter_count)
