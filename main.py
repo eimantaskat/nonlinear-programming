@@ -13,14 +13,22 @@ if __name__ == '__main__':
 
 	penalty_func = -x*y*z + 1/r * (sp.Max(0, -x)**2 + sp.Max(0, -y)**2 + sp.Max(0, -z)**2 + sp.Pow(gi, 2))
 
-	# foo = sp.sympify(penalty_func)
-	# result = foo.subs([(x, 6**0.5/6), (y, 6**0.5/6), (z, 6**0.5/6), (r, 1)])
+	penalty_function = FunctionWrapper(function=penalty_func, symbols=['x', 'y', 'z', 'r'])
 
-	penaltyFunction = FunctionWrapper(function=penalty_func, symbols=['x', 'y', 'z', 'r'])
-	# print(penaltyFunction.at([1]*3, 0.2)) # sqrt(6)/6
-	# print(penaltyFunction.at([6**0.5/6]*3 + [0.2])) # sqrt(6)/6
+	x_values = np.array([[0]*3, [1]*3, [.2, .5, 0]])
+	tol = 1e-4
+	for x_val in x_values:
+		x0 = x_val
+		alpha = 0.1
+		r_val = 10
+		iter_count = 0
+		while r_val > tol:
+			x0, iter = simplex(penalty_function, x0, r_val, alpha=alpha, tol=tol)
+			iter_count += iter
+			r_val /= 10
 
-	x_val = np.array([1, 1, 1])
-	r_val = 0.1
-	result, iter_count = simplex(penaltyFunction, x_val, r_val, alpha=.3, tol=1e-4)
-	print(result, iter_count)
+		print(f'Starting point: {x_val}')
+		print(f'Optimal point: {x0}')
+		print(f'Number of iterations: {iter_count}')
+		print(f'Number of function evaluations: {penalty_function.function.times_called}')
+		print(f'Value of the penalty function at the point: {penalty_function.at(x0, r_val)}\n')
