@@ -33,7 +33,6 @@ class Function(dict):
 class FunctionWrapper():
     def __init__(self, *args, **kwargs):
         function = kwargs.get('function', None)
-        self._derivatives = {}
         symbols = kwargs.get('symbols', None)
 
         self._symbols = symbols
@@ -58,8 +57,3 @@ class FunctionWrapper():
 
     def clear_cache(self):
         self._function.clear()
-        for derivative in self._derivatives.values():
-            derivative.clear()
-        for gradient in self._gradient.values():
-            gradient.clear()
-        self._gradient_points = []

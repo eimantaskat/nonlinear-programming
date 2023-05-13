@@ -19,7 +19,7 @@ if __name__ == '__main__':
 	tol = 1e-4
 	for x_val in x_values:
 		x0 = x_val
-		alpha = 0.1
+		alpha = 0.2
 		r_val = 10
 		iter_count = 0
 		while r_val > tol:
@@ -27,8 +27,9 @@ if __name__ == '__main__':
 			iter_count += iter
 			r_val /= 10
 
-		print(f'Starting point: {x_val}')
-		print(f'Optimal point: {x0}')
-		print(f'Number of iterations: {iter_count}')
-		print(f'Number of function evaluations: {penalty_function.function.times_called}')
-		print(f'Value of the penalty function at the point: {penalty_function.at(x0, r_val)}\n')
+		print(f'Pradinis taškas: {x_val}')
+		print(f'Rastas minimumo taškas: {x0}')
+		print(f'Iteracijų kiekis: {iter_count}')
+		print(f'Tikslo funkcijos skaičiavimų kiekis: {penalty_function.function.times_called}')
+		print(f'Tikslo funkcijos reikšmė minimumo taške: {penalty_function.at(x0, r_val)}\n')
+		penalty_function.clear_cache()
